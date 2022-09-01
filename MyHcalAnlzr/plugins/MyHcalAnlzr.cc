@@ -84,6 +84,8 @@ private:
   //edm::EDGetTokenT<EEDigiCollection> eeDigiCollectionToken_;
   //edm::EDGetTokenT<EcalRecHitCollection> EERecHitCollectionT_;
 
+  string runtype_;
+
 #ifdef THIS_IS_AN_EVENTSETUP_EXAMPLE
   edm::ESGetToken<SetupData, SetupRecord> setupToken_;
 #endif
@@ -115,9 +117,10 @@ private:
 //
 MyHcalAnlzr::MyHcalAnlzr(const edm::ParameterSet& iConfig)
    :   //HBHERecHitToken_(consumes<HBHERecHitCollection>(iConfig.getUntrackedParameter<edm::InputTag>("tagRechit", edm::InputTag("hbheprereco")))),
-       qie11digisToken_(consumes<QIE11DigiCollection>(iConfig.getUntrackedParameter<edm::InputTag>("tagQIE11", edm::InputTag("hcalDigis"))))
+       qie11digisToken_(consumes<QIE11DigiCollection>(iConfig.getUntrackedParameter<edm::InputTag>("tagQIE11", edm::InputTag("hcalDigis")))),
        //eeDigiCollectionToken_(consumes<EEDigiCollection>(iConfig.getParameter<edm::InputTag>("EEdigiCollection"))),
-       //EERecHitCollectionT_(consumes<EcalRecHitCollection>(iConfig.getParameter<edm::InputTag>("EERecHitCollection")))
+       //EERecHitCollectionT_(consumes<EcalRecHitCollection>(iConfig.getParameter<edm::InputTag>("EERecHitCollection"))),
+       runtype_(iConfig.getUntrackedParameter<string>("runtype"))
 {
 #ifdef THIS_IS_AN_EVENTSETUP_EXAMPLE
   setupDataToken_ = esConsumes<SetupData, SetupRecord>();
@@ -169,10 +172,13 @@ void MyHcalAnlzr::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetu
   long eventid = iEvent.id().event();
   long lumiid  = iEvent.id().luminosityBlock();
 
+  
   float shunt = -1;
-  if(eventid > 1000 && eventid < 2000) shunt = 6;
-  else if(eventid > 4000 && eventid < 5000) shunt = 1;
-  else return;
+  if(runtype_=="Local"){
+    if(eventid > 1000 && eventid < 2000) shunt = 6;
+    else if(eventid > 4000 && eventid < 5000) shunt = 1;
+    else return;
+  } else assert(runtype_=="Global");
 
   //edm::Handle<HBHERecHitCollection> hcalRecHits;
   edm::Handle<QIE11DigiCollection> qie11Digis;
@@ -244,6 +250,7 @@ void MyHcalAnlzr::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetu
   for (QIE11DigiCollection::const_iterator it = qie11Digis->begin(); it != qie11Digis->end(); ++it) {
     const QIE11DataFrame digi = static_cast<const QIE11DataFrame>(*it);
 
+std::cout << digi << std::endl;
     //	Explicit check on the DetIds present in the Collection
     HcalDetId const& did = digi.detid();
     if(!(did.subdet() == HcalEndcap || did.subdet() == HcalBarrel)) continue;
