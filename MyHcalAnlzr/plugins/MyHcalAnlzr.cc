@@ -250,7 +250,6 @@ void MyHcalAnlzr::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetu
   for (QIE11DigiCollection::const_iterator it = qie11Digis->begin(); it != qie11Digis->end(); ++it) {
     const QIE11DataFrame digi = static_cast<const QIE11DataFrame>(*it);
 
-std::cout << digi << std::endl;
     //	Explicit check on the DetIds present in the Collection
     HcalDetId const& did = digi.detid();
     if(!(did.subdet() == HcalEndcap || did.subdet() == HcalBarrel)) continue;

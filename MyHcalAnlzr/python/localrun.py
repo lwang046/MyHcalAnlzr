@@ -25,7 +25,7 @@ process.source = cms.Source("HcalTBSource",
 	firstLuminosityBlockForEachRun = cms.untracked.VLuminosityBlockID([]),
 	fileNames = cms.untracked.vstring(
 		#"file:/eos/cms/store/group/dpg_hcal/comm_hcal/USC/run358080/USC_358080.root",
-		'file:/eos/cms/store/group/dpg_hcal/comm_hcal/USC/run' + RUN + '/USC_' + RUN + '.root' for RUN in ['356457', '355538']
+		'file:/eos/cms/store/group/dpg_hcal/comm_hcal/USC/run' + RUN + '/USC_' + RUN + '.root' for RUN in ["355882", "356115"]
                 #['358277', '358222', '358179', '358160', '358101', '358087', '357996', '357968', '357845', '357787', '357743', '357646', '357622', '357564', '357501', '357456', '357415', '357337', '357287', '357142', '357008', '356958', '356926' , '356836', '356646', '356590', '356538', '356119', '355883', '355710', '355079']
         )
 )

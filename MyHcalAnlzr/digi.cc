@@ -27,9 +27,11 @@ int main(int argc, char *argv[])
   string finame = argv[1];
   string foname = argv[2];
 
-  vector<float> lumi = {9.6497, 9.6496, 9.6495, 9.6494, 9.6493, 9.6492, 9.6491, 9.649, 9.165, 8.585, 7.950, 6.7885, 6.788, 6.434, 6.333, 5.950, 5.442, 5.245, 4.837, 4.408, 3.643, 3.312, 2.817, 2.786, 2.077, 1.820, 1.487, 1.104, 0.484, 0.178, 0.110, 0.034, 0.001};
-  vector<string> runid = {"358277", "358222", "358179", "358160", "358101", "358087", "357996", "357968", "357845", "357787", "357743", "357646", "357622", "357564", "357501", "357456", "357415", "357337", "357287", "357142", "357008", "356958", "356926" , "356836", "356646", "356590", "356538", "356457", "356119", "355883", "355710", "355538", "355079"};
+  //vector<float> lumi = {9.6497, 9.6496, 9.6495, 9.6494, 9.6493, 9.6492, 9.6491, 9.649, 9.165, 8.585, 7.950, 6.7885, 6.788, 6.434, 6.333, 5.950, 5.442, 5.245, 4.837, 4.408, 3.643, 3.312, 2.817, 2.786, 2.077, 1.820, 1.487, 1.104, 0.484, 0.178, 0.110, 0.034, 0.001};
+  //vector<string> runid = {"358277", "358222", "358179", "358160", "358101", "358087", "357996", "357968", "357845", "357787", "357743", "357646", "357622", "357564", "357501", "357456", "357415", "357337", "357287", "357142", "357008", "356958", "356926" , "356836", "356646", "356590", "356538", "356457", "356115", "355882", "355710", "355538", "355079"};
 
+  vector<float> lumi = {8.24, 8.25, 8.26, 8.27, 8.28, 8.29, 8.30, 8.31};
+  vector<string> runid = {"358030", "358092", "358152", "358155", "358164", "358209", "358253", "358283"};
 
   reverse(lumi.begin(), lumi.end());
   reverse(runid.begin(), runid.end());
@@ -68,7 +70,7 @@ int main(int argc, char *argv[])
         for(int j=0; j<72; j++){
           histarray[n][t][i][j] = new TH1F*[7];
           for(int k=0; k<7; k++){
-            histarray[n][t][i][j][k] = new TH1F(("hist_run"+runid.at(n)+"_sipmT"+to_string(t)+"_ieta"+to_string(i<=29?i-29:i-28)+"_iphi"+to_string(j+1)+"_depth"+to_string(k+1)).c_str(), "Pedestal per Channel; ADC; Entries", 400, 0, 40);
+            histarray[n][t][i][j][k] = new TH1F(("hist_run"+runid.at(n)+"_sipmT"+to_string(t)+"_ieta"+to_string(i<=29?i-29:i-28)+"_iphi"+to_string(j+1)+"_depth"+to_string(k+1)).c_str(), "Pedestal per Channel; ADC; Entries", 1600, 0, 40);
           }
         }
       }
@@ -87,8 +89,8 @@ int main(int argc, char *argv[])
       pedMean[nh][nt]=new TH1F*[nruns];
       pedRMS[nh][nt]=new TH1F*[nruns];
       for(int n=0; n<nruns; n++){
-        pedMean[nh][nt][n] = new TH1F((det+"_sipmT"+to_string(nt)+"pedMean_run"+runid.at(n)).c_str(), "Pedestal Mean; ADC; Entries", 800, 0, 40);
-        pedRMS[nh][nt][n] = new TH1F((det+"_sipmT"+to_string(nt)+"pedRMS_run"+runid.at(n)).c_str(), "Pedestal RMS; ADC; Entries", 800, 0, 40);
+        pedMean[nh][nt][n] = new TH1F((det+"_sipmT"+to_string(nt)+"pedMean_run"+runid.at(n)).c_str(), "Pedestal Mean; ADC; Entries", 1600, 0, 40);
+        pedRMS[nh][nt][n] = new TH1F((det+"_sipmT"+to_string(nt)+"pedRMS_run"+runid.at(n)).c_str(), "Pedestal RMS; ADC; Entries", 1600, 0, 40);
       }
     }
   }
@@ -101,7 +103,7 @@ int main(int argc, char *argv[])
 
     if(find(runid.begin(), runid.end(), to_string((int)RunNum))==runid.end()) continue;
 
-    if(shunt!=6.0) continue;
+    //if(shunt!=1.0) continue;
 
     int runidx = distance(runid.begin(), find(runid.begin(), runid.end(), to_string((int)RunNum)) );
     int ietaidx = ieta<0?ieta+29:ieta+28;

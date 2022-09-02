@@ -6,7 +6,7 @@ process = cms.Process('MyHcalAnlzr',eras.Run2_2018)
 
 process.load("FWCore.MessageService.MessageLogger_cfi")
 process.load('Configuration.StandardSequences.Services_cff')
-process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(1) )
+process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(-1) )
 process.MessageLogger.cerr.FwkReport.reportEvery = cms.untracked.int32(1000)
 
 process.load('Configuration.EventContent.EventContent_cff')
@@ -23,7 +23,14 @@ process.load("RecoLocalTracker.SiPixelRecHits.SiPixelRecHits_cfi")
 
 process.source = cms.Source("PoolSource",
         fileNames = cms.untracked.vstring(
-		"/store/data/Run2022C/Cosmics/RAW/v1/000/355/824/00000/02f6dbd1-62e5-4560-be9e-acc89ec02c8d.root"
+		"file:/eos/cms/tier0/store/data/Run2022D/Cosmics/RAW/v1/000/358/030/00000/38c224b2-b659-4acb-90f9-705bf9cc120a.root",
+		"file:/eos/cms/tier0/store/data/Run2022D/Cosmics/RAW/v1/000/358/092/00000/12c18f49-2893-412a-9bdc-d5424e89f3f6.root",
+		"file:/eos/cms/tier0/store/data/Run2022D/Cosmics/RAW/v1/000/358/152/00000/08d8d6df-d609-4b03-9188-6834ae88a976.root",
+		"file:/eos/cms/tier0/store/data/Run2022D/Cosmics/RAW/v1/000/358/155/00000/0a4e7f59-3130-4a3d-9897-ca3ec7e69121.root",
+		"file:/eos/cms/tier0/store/data/Run2022D/Cosmics/RAW/v1/000/358/164/00000/0afce2c7-1c39-4e04-9a89-267896298b9f.root",
+		"file:/eos/cms/tier0/store/data/Run2022D/Cosmics/RAW/v1/000/358/209/00000/6e99adcd-19d3-42ff-b82c-7a6380699c49.root",
+		"file:/eos/cms/tier0/store/data/Run2022D/Cosmics/RAW/v1/000/358/253/00000/a8000a34-8d76-49ea-8557-3b76cdfedcae.root",
+		"file:/eos/cms/tier0/store/data/Run2022D/Cosmics/RAW/v1/000/358/283/00000/74d64b7e-478d-4707-a274-757bbbad24a2.root",
         )
 )
 
