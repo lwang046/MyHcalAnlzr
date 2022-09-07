@@ -2,6 +2,7 @@
 #include "TFile.h"
 #include "TNtuple.h"
 #include "TCanvas.h"
+#include "TH3.h"
 #include "TH2.h"
 #include "TF1.h"
 #include "TProfile.h"
@@ -27,11 +28,11 @@ int main(int argc, char *argv[])
   string finame = argv[1];
   string foname = argv[2];
 
-  //vector<float> lumi = {9.6497, 9.6496, 9.6495, 9.6494, 9.6493, 9.6492, 9.6491, 9.649, 9.165, 8.585, 7.950, 6.7885, 6.788, 6.434, 6.333, 5.950, 5.442, 5.245, 4.837, 4.408, 3.643, 3.312, 2.817, 2.786, 2.077, 1.820, 1.487, 1.104, 0.484, 0.178, 0.110, 0.034, 0.001};
-  //vector<string> runid = {"358277", "358222", "358179", "358160", "358101", "358087", "357996", "357968", "357845", "357787", "357743", "357646", "357622", "357564", "357501", "357456", "357415", "357337", "357287", "357142", "357008", "356958", "356926" , "356836", "356646", "356590", "356538", "356457", "356115", "355882", "355710", "355538", "355079"};
+  vector<float> lumi = {9.6497, 9.6496, 9.6495, 9.6494, 9.6493, 9.6492, 9.6491, 9.649, 9.165, 8.585, 7.950, 6.7885, 6.788, 6.434, 6.333, 5.950, 5.442, 5.245, 4.837, 4.408, 3.643, 3.312, 2.817, 2.786, 2.077, 1.820, 1.487, 1.104, 0.484, 0.178, 0.110, 0.034, 0.001};
+  vector<string> runid = {"358277", "358222", "358179", "358160", "358101", "358087", "357996", "357968", "357845", "357787", "357743", "357646", "357622", "357564", "357501", "357456", "357415", "357337", "357287", "357142", "357008", "356958", "356926" , "356836", "356646", "356590", "356538", "356457", "356115", "355882", "355710", "355538", "355079"};
 
-  vector<float> lumi = {8.24, 8.25, 8.26, 8.27, 8.28, 8.29, 8.30, 8.31};
-  vector<string> runid = {"358030", "358092", "358152", "358155", "358164", "358209", "358253", "358283"};
+  //vector<float> lumi = {8.24, 8.25, 8.26, 8.27, 8.28, 8.29, 8.30, 8.31};
+  //vector<string> runid = {"358030", "358092", "358152", "358155", "358164", "358209", "358253", "358283"};
 
   reverse(lumi.begin(), lumi.end());
   reverse(runid.begin(), runid.end());
@@ -103,12 +104,12 @@ int main(int argc, char *argv[])
 
     if(find(runid.begin(), runid.end(), to_string((int)RunNum))==runid.end()) continue;
 
-    //if(shunt!=1.0) continue;
+    if(shunt!=6.0) continue;
 
     int runidx = distance(runid.begin(), find(runid.begin(), runid.end(), to_string((int)RunNum)) );
     int ietaidx = ieta<0?ieta+29:ieta+28;
     int iphiidx = iphi-1;
-    int depthidx = depth=1;
+    int depthidx = depth-1;
     int sipmidx = -1;
     if(type==3||type==5) sipmidx=0;
     else if(type==4||type==6) sipmidx=1;
@@ -123,6 +124,8 @@ int main(int argc, char *argv[])
 
   std::cout << "Postprocessing histograms..." << std::endl;
 
+  TH3F* h3 = new TH3F("h3", "h3", 59, -29, 30, 72, 0, 72, 7, 1, 8);
+
   for(int n=0; n<nruns; n++){
     for(int t=0; t<2; t++){
       for(int i=0; i<58; i++){
@@ -134,6 +137,7 @@ int main(int argc, char *argv[])
               else if((i<=12 || i>=45 ) || (i==13 && k>=3) || (i==44 && k>=3)) nh=1;
               pedMean[nh][t][n]->Fill(histarray[n][t][i][j][k]->GetMean());
               pedRMS[nh][t][n]->Fill(histarray[n][t][i][j][k]->GetRMS());
+              if(t==1 && nh==0 && histarray[n][t][i][j][k]->GetMean() < 5.6) h3->Fill(i<29?i-29:i-28, j, k+1); 
             }
           }
         }
@@ -181,9 +185,11 @@ int main(int argc, char *argv[])
   }
 
 
+
   std::cout << "Saving results..." << std::endl;
 
   ofile->cd();
+  h3->Write();
 
   for(int nh=0; nh<2; nh++){
     for(int nt=0; nt<2; nt++){
